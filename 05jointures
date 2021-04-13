@@ -1,0 +1,137 @@
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id ORDER BY team_id asc;
++-----------+------------+--------+---------+
+| firstname | lastname   | role   | team_id |
++-----------+------------+--------+---------+
+| hermione  | granger    | chaser |       1 |
+| lily      | potter     | seeker |       1 |
+| fred      | weasley    | beater |       1 |
+| drago     | malefoy    | beater |       1 |
+| severus   | rogue      | chaser |       2 |
+| tom       | jÃ©dusor   | beater |       2 |
+| ron       | weasley    | chaser |       3 |
+| ginny     | weasley    | keeper |       3 |
+| albus     | dumbledore | beater |       3 |
+| harry     | potter     | beater |       4 |
+| george    | weasley    | chaser |       4 |
+| arthur    | weasley    | keeper |       4 |
++-----------+------------+--------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id ORDER BY role asc;
++-----------+------------+--------+---------+
+| firstname | lastname   | role   | team_id |
++-----------+------------+--------+---------+
+| harry     | potter     | beater |       4 |
+| fred      | weasley    | beater |       1 |
+| drago     | malefoy    | beater |       1 |
+| albus     | dumbledore | beater |       3 |
+| tom       | jÃ©dusor   | beater |       2 |
+| hermione  | granger    | chaser |       1 |
+| ron       | weasley    | chaser |       3 |
+| george    | weasley    | chaser |       4 |
+| severus   | rogue      | chaser |       2 |
+| ginny     | weasley    | keeper |       3 |
+| arthur    | weasley    | keeper |       4 |
+| lily      | potter     | seeker |       1 |
++-----------+------------+--------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id ORDER BY lastname asc;
++-----------+------------+--------+---------+
+| firstname | lastname   | role   | team_id |
++-----------+------------+--------+---------+
+| albus     | dumbledore | beater |       3 |
+| hermione  | granger    | chaser |       1 |
+| tom       | jÃ©dusor   | beater |       2 |
+| drago     | malefoy    | beater |       1 |
+| harry     | potter     | beater |       4 |
+| lily      | potter     | seeker |       1 |
+| severus   | rogue      | chaser |       2 |
+| ron       | weasley    | chaser |       3 |
+| ginny     | weasley    | keeper |       3 |
+| fred      | weasley    | beater |       1 |
+| george    | weasley    | chaser |       4 |
+| arthur    | weasley    | keeper |       4 |
++-----------+------------+--------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id ORDER BY firstname asc;
++-----------+------------+--------+---------+
+| firstname | lastname   | role   | team_id |
++-----------+------------+--------+---------+
+| albus     | dumbledore | beater |       3 |
+| arthur    | weasley    | keeper |       4 |
+| drago     | malefoy    | beater |       1 |
+| fred      | weasley    | beater |       1 |
+| george    | weasley    | chaser |       4 |
+| ginny     | weasley    | keeper |       3 |
+| harry     | potter     | beater |       4 |
+| hermione  | granger    | chaser |       1 |
+| lily      | potter     | seeker |       1 |
+| ron       | weasley    | chaser |       3 |
+| severus   | rogue      | chaser |       2 |
+| tom       | jÃ©dusor   | beater |       2 |
++-----------+------------+--------+---------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id GROUP BY role;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'wild_db_quest.wizard.firstname' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player GROUP BY role  ON wizard.id=player.id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON wizard.id=player.id' at line 1
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id GROUP BY GROUP_CONCAT(role);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id GROUP BY GROUP_CONCAT(role) asc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1
+mysql> SELECT firstname, lastname, role, team_id FROM wizard LEFT JOIN player ON
+ wizard.id=player.id GROUP BY lastname asc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc' at line 1
+mysql> SELECT firstname, lastname, role, team_id FROM wizard LEFT JOIN player ON wizard.id=player.id;
++-----------+------------+--------+---------+
+| firstname | lastname   | role   | team_id |
++-----------+------------+--------+---------+
+| harry     | potter     | beater |       4 |
+| hermione  | granger    | chaser |       1 |
+| lily      | potter     | seeker |       1 |
+| ron       | weasley    | chaser |       3 |
+| ginny     | weasley    | keeper |       3 |
+| fred      | weasley    | beater |       1 |
+| george    | weasley    | chaser |       4 |
+| arthur    | weasley    | keeper |       4 |
+| molly     | weasley    | NULL   |    NULL |
+| drago     | malefoy    | beater |       1 |
+| albus     | dumbledore | beater |       3 |
+| severus   | rogue      | chaser |       2 |
+| tom       | jÃ©dusor   | beater |       2 |
++-----------+------------+--------+---------+
+13 rows in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id WHERE player.role="seeker" ORDER BY lastname asc;
++-----------+----------+--------+---------+
+| firstname | lastname | role   | team_id |
++-----------+----------+--------+---------+
+| lily      | potter   | seeker |       1 |
++-----------+----------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard JOIN player ON wizard.id=player.id WHERE player.role="seeker" ORDER BY firstname asc;
++-----------+----------+--------+---------+
+| firstname | lastname | role   | team_id |
++-----------+----------+--------+---------+
+| lily      | potter   | seeker |       1 |
++-----------+----------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard LEFT JOIN player ON wizard.id=playe
+r.id WHERE player.role="NULL";
+Empty set (0.00 sec)
+
+mysql> SELECT firstname, lastname, role, team_id FROM wizard LEFT JOIN player ON wizard.id=playe
+r.id WHERE player.role is NULL;
++-----------+----------+------+---------+
+| firstname | lastname | role | team_id |
++-----------+----------+------+---------+
+| molly     | weasley  | NULL |    NULL |
++-----------+----------+------+---------+
+1 row in set (0.00 sec)
+
+mysql> 
